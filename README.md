@@ -24,7 +24,7 @@
 
  SQL Injection có thể chia nhỏ thành các dạng sau:
 
-  - In-band SQLi:
+  - [In-band SQLi](https://github.com/Llam-a/SQL-injection/blob/main/In-band%20SQLi.md)
 
     - Error-based SQLi
    
