@@ -33,7 +33,7 @@
   
   - [Inferential SQLi (Blind SQLi)](https://github.com/Llam-a/SQL-injection/blob/main/Inferential%20SQLi%20(Blind%20SQLi).md)
   
-    - Blind-boolean-based SQLi:
+    - Blind-boolean-based SQLi
 
       - Time-based-blind SQLi
   
