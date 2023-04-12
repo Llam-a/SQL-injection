@@ -26,9 +26,9 @@
 
   - [In-band SQLi](https://github.com/Llam-a/SQL-injection/blob/main/In-band%20SQLi.md)
 
-    - Error-based SQLi
+    - [Error-based SQLi](https://github.com/Llam-a/SQL-injection/blob/main/In-band%20SQLi.md#error-based-sqli)
    
-    - Union-based SQLi
+    - [Union-based SQLi](https://github.com/Llam-a/SQL-injection/blob/main/In-band%20SQLi.md#union-based-sqli)
   
   - Inferential SQLi (Blind SQLi)
   
