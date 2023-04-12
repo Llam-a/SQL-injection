@@ -20,23 +20,24 @@
    - Đánh cắp các thông tin trong CSDL
 
    - Chiếm quyền điều khiển hệ thống
+
 # Types of SQL Injection :
 
  SQL Injection có thể chia nhỏ thành các dạng sau:
 
   - [In-band SQLi](https://github.com/Llam-a/SQL-injection/blob/main/In-band%20SQLi.md)
 
-    - [Error-based SQLi](https://github.com/Llam-a/SQL-injection/blob/main/In-band%20SQLi.md#error-based-sqli)
+    - Error-based SQLi
    
-    - [Union-based SQLi](https://github.com/Llam-a/SQL-injection/blob/main/In-band%20SQLi.md#union-based-sqli)
+    - Union-based SQLi
   
-  - Inferential SQLi (Blind SQLi)
+  - [Inferential SQLi (Blind SQLi)](https://github.com/Llam-a/SQL-injection/blob/main/Inferential%20SQLi%20(Blind%20SQLi).md)
   
-  - Blind-boolean-based SQLi:
+    - Blind-boolean-based SQLi:
 
-    - Time-based-blind SQLi
+      - Time-based-blind SQLi
   
-  - Out-of-band SQLi
+    - Out-of-band SQLi
   
    # How to detect SQL injection vulnerabilities:
   
