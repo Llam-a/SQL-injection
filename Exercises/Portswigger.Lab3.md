@@ -6,7 +6,7 @@ The lab will provide a random value that you need to make appear within the quer
 
 # Overview:
 
-Theo mô tả của đề, ta biết challenge này ta sẽ dùng kĩ thuật tấn công UNION để lấy dữ liệu tử table khác. Dựa theo những kĩ năng từ các lab trước cùng với UNION attack để hoàn thành lab này.
+Theo tên của đề, ta biết challenge này ta sẽ dùng kĩ thuật tấn công UNION để xác định số cột trả về bởi cuộc truy vấn. Dựa theo những kĩ năng từ các lab trước cùng với UNION attack để hoàn thành lab này.
 
 Form của lab này như sau
 
