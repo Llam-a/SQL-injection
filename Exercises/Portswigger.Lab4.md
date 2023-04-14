@@ -12,6 +12,7 @@ Ta có form lab
  
  Vẫn như lab trước sử dụng UNION attack, nhưng lần này có khác biệt, ở web này có ghi là `Make the database retrieve the string: '8yIXlG'` nghĩa là làm cho database truy xuất ra chuỗi `'8yIXIG'`. Vậy thì khi sử dụng UNION attack ta phải thêm giá trị đó vào ở vị trí thích hợp.
  
+ 
  # Solution
  
  Sử dụng UNION attack 
