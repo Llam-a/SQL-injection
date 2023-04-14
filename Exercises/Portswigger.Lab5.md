@@ -22,7 +22,7 @@ Bước đầu ta cần xác định số cột ở phần filter category trư�
 
 ![image](https://user-images.githubusercontent.com/115911041/231928102-aecd466b-985b-4e75-8030-9d150bd72184.png)
 
-Ta thấy có 2 collums. Tiếp theo đó, ta sử dụng UNION ATTACK với giá trị khác
+Ta thấy có 2 collums. Bởi vì `username` và `password` là thuộc kiểu dạng text nên collums sẽ bao gồm dạng text, nên ta sử dụng UNION ATTACK với giá trị khác
 
 `'+UNION+SELECT+'a','b'--`
 
