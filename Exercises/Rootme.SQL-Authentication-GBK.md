@@ -30,7 +30,8 @@ Vậy ta có payload như sau:
 
 `login=%af’ or 1=1 -- -&password=1234 hoặc
 
-login=%bf’ or 1=1 — -&password=1234`
+login=%bf’ or 1=1 -- -&password=1234`
+
 
 
 
