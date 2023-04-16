@@ -20,22 +20,20 @@ Bắt đầu viewsource
 
 ![image](https://user-images.githubusercontent.com/115911041/232275068-f0e0a858-af68-4c98-869a-285f2c328cd0.png)
 
-Bingo!! Thật sự là có lỗi ở phần đăng kí
+Bingo!! Thật sự là có lỗi ở phần đăng kí.
 
 ![image](https://user-images.githubusercontent.com/115911041/232275126-62c3887a-88ca-4f3e-b7d4-95b2a8931c72.png)
 
 Nghĩa là, Column login sẽ nhận giá trị username được tạo với độ dài max là 12. Nếu vượt quá 12 thì chuỗi sau vị trí 12 đó sẽ bị cắt bỏ đi mà nhận giá trị trước vị trí 12.
 
-Vậy ta có thể dùng SQL Truncation để tạo ra user mới có username giống với username đã tồn tại.
-
-Ví dụ:
-
-Ở trong database có admin user mà username là admin. Và định dạng độ dài của username là 20. Ta sẽ tạo user mới có username là
+Vậy ta có thể tiến hành ghi đè như sau:
 
 `adminxxxxxxxxxxxxxhackhack`
 
-Bởi vì, độ dài của username là 20, nên từ kí tự 21 trở đi sẽ bị cắt ngắn
+Bởi vì, độ dài của login là 12, nên từ kí tự 12 trở đi sẽ bị cắt.Là chỉ còn lại là `admin`
 
 ![image](https://user-images.githubusercontent.com/115911041/232276597-434244d4-ecf0-4179-a4e2-d94d66306263.png)
 
 `Flag:J41m3Qu4nD54Tr0nc`
+
+[Read more](https://resources.infosecinstitute.com/topic/sql-truncation-attack/#gref)
