@@ -8,7 +8,7 @@ Statement: Retrieve the administrator password
 
 # Overview:
 
-Form của challenge là 1 trnag web có chức năng login
+Form của challenge là 1 trang web có chức năng login
 
 ![image](https://user-images.githubusercontent.com/115911041/232283783-99a878a7-880e-474e-b3df-5af2b3112e4e.png)
 
