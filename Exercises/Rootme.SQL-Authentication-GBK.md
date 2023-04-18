@@ -28,10 +28,12 @@ Và bây giờ ta cần tìm cách bypass hàm `addslashes` này.Mình có tham 
 
 Vậy ta có payload như sau:
 
-`login=%af’ or 1=1 -- -&password=1234 hoặc
+`login=%af%27 or 1=1 -- -&password=1234 hoặc
 
-login=%bf’ or 1=1 -- -&password=1234`
+login=%bf%27 or 1=1 -- -&password=1234`
 
+![image](https://user-images.githubusercontent.com/115911041/232721807-49f56ac5-d99e-4e26-a56a-c6db36eaf607.png)
 
+`Flag:iMDaFlag1337!` 
 
 
