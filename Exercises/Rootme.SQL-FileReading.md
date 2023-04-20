@@ -46,7 +46,7 @@ Kết quả xuất hiện 4 columns, nhưng quan trọng ở đây là `memeber_
 
 ![image](https://user-images.githubusercontent.com/115911041/233365720-2a7a00b6-234b-4403-a240-8985e341f312.png)
 
-Kết quả ở email là dạng Base64, ta sẽ đem decode nó.Nhưng lại không cho kết quả.Sau một hồi tìm hiểu ở Docs mà challenge cung cấp, thì mình khám phả được là hàm `load_file()` được dùng để đọc file bên dưới hệ thống. VD `load_file('/web-serveur/ch31/index.php')`
+Kết quả ở email cho ra `member_password` là dạng Base64, ta sẽ đem decode nó.Nhưng lại không cho kết quả.Sau một hồi tìm hiểu ở Docs mà challenge cung cấp, thì mình khám phả được là hàm `load_file()` được dùng để đọc file bên dưới hệ thống. VD `load_file('/web-serveur/ch31/index.php')`
 
 Vậy để xử lí cái password thì ta cần phải tìm ra đường dẫn tới cái chỗ mà nó được xử lí thưởng là file `index.php`. Sau khi mày mò, thì bị từ chối hết, nhưng nếu các bạn đã làm nhưng bài LFI thì thường sử dụng một đưởng dẫn rất quen thuộc `/challenge/web-serveur/ch31/index.php`.Ta sẽ Hex đường dẫn đó
 
@@ -61,6 +61,8 @@ Kết quả là một nùi như vậy @@. Ta có một file index.php. Bỏ nh�
 ![image](https://user-images.githubusercontent.com/115911041/233373641-010e9d30-ee6b-4a6d-9c75-05b165870528.png)
 
 ![image](https://user-images.githubusercontent.com/115911041/233374185-a8516c9a-14c2-413b-832a-6be5ce78d5a1.png)
+
+[String XOR](https://en.wikipedia.org/wiki/XOR_cipher)
 
 Có thể thấy lần lượt là password được xử lí bằng hàm sha1 và sau đó được mã hóa XOR. Và quan trọng nhất là ta có key
 
