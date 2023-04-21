@@ -64,7 +64,9 @@ Kết quả là một nùi như vậy @@. Ta có một file index.php. Bỏ nh�
 
 [String XOR](https://en.wikipedia.org/wiki/XOR_cipher)
 
-Có thể thấy lần lượt là password được xử lí bằng hàm sha1 và sau đó được mã hóa XOR. Và quan trọng nhất là ta có key
+Ta thấy để đăng nhập vào quyền admin thì giá trị password của ta sau khi gửi lên , sẽ qua hàm `sha1($pasword)` và giá trị bằng giá trị trả về hàm `stringxor()`.
+
+Phân tích hàm `stringxor()`. Nó sẽ nhận vào 2 chuỗi, cụ thể là giá trị của biến `$key` đã có sẵn, và `base64_decode($data[‘member_password’])`. Biến `$data[‘member_password’]` sẽ được lấy qua câu truy vấn `SELECT member_password FROM member WHERE …` gì đó
 
 Bây giờ mình sẽ giả lập thử source code đã cho của challenge. 
 
