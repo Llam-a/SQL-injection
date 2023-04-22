@@ -56,7 +56,7 @@ INSERT INTO example_table (a,b,c) VALUES ('a','b','c'),('d','e','f') -- -
 ```
 
 Vậy thì ta sẽ có công thức payload như sau
-`email'),('username', 'password', 'payload') -- -
+`email'),('username', 'password', 'payload') -- -`
 
 Sau khi đã có phương pháp giải rồi, mình tạo 1 account mới với paload như trên
 
