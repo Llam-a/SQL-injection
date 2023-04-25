@@ -130,3 +130,5 @@ for password in listPassword:
 
 Và ta đã ra được flag.
 
+Nhận xét: Sau khi mình đưa a khánh, thì cách này không được hay cho lắm chỉ được dùng trong trường hợp ít còn nếu mà tầm 30 kí tự thì bốc c mà ăn lunn.Nên là các bạn có thể tham khảo cách của a Khánh [ở đây nha](https://clbuezzz.wordpress.com/2021/05/26/root-me-challenge-sql-injection-time-based/)
+
