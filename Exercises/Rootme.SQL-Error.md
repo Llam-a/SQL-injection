@@ -126,4 +126,16 @@ for i in range(0, 1001):
 OUTPUT:
 ![image](https://user-images.githubusercontent.com/115911041/234318522-d10ca3c5-04e4-414c-986b-548e6b8e83c8.png)
 
-Tới chỗ này thì làm bth thôi. Màu màu chút í mà :))))))
+Kết quả cho ra 2 column `us3rn4m3_c0l` và `p455w0rd_c0l`. Thông thường thì username sẽ tương ứng với mật khẩu. Giờ ta sẽ các user trong column `us3rn4m3_c0l`  và idnex tương ứng, sau đó lấy index tương ứng để gửi query bên `p455w0rd_c0l`.
+
+![image](https://user-images.githubusercontent.com/115911041/234322283-a3090d6b-7863-4b00-b4b2-2df35cc493a2.png)
+
+Ta thấy admin ứng với `0`. Thì nó khá giống với cái cách mà ta offset ở trên `offset 0`. Còn không các bạn có thể làm kiểu này lun cho nó ngầu :))))
+
+![image](https://user-images.githubusercontent.com/115911041/234322915-5f091479-f343-4a40-b15a-fca4b4a4346b.png)
+
+Ra password lun, tương ứng vị trí `admin` khi mà ta quét user ở column `us3rn4m3_c0l`.
+
+
+
+
