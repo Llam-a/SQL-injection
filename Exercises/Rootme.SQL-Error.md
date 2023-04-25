@@ -26,18 +26,20 @@ Form của challenge. Lần này challenge cung cấp cho ta 2 mục `Authentica
 
 Nhận thấy URL có thay đổi. Thấy xuất hiện `order` và `ASC`, nghĩa là ở đây đang sử dụng lệnh `order by` và `ASC` là sắp sếp theo thứ tự tăng dần. Mình sẽ thử fuzz 
 
+![image](https://user-images.githubusercontent.com/115911041/234265663-6536c738-9b3c-4d26-af47-322c912aad32.png)
+
 Ban đầu là thêm dấu nháy `'` thì có lỗi báo giống như dự đoán là  đang sử dụng `order by` theo cột page và `ERROR: syntax error at or near "''"` nghĩa là database đang chạy là PostgreSQL.
 
 Vậy đối với challenge này ta dùng Error-Based Blind SQL Injection. Phương thức này là cơ bản là một phương thức mà câu truy vấn của mình sẽ khiến server trả về thông báo lỗi, từ thông báo lỗi đó có thể chứa nội dung truy vấn hoặc các thông tin của cơ sở dữ liệu để chúng ta có thể khai thác xa hơn.
 
-Đối với PostgreSQL thì chỉ có 1 lỗi ta có thể khai thác SQL injection - đổi kiểu dữ liệu từ dạng chuỗi sang dạng số. Ta có 2 hàm sử dụng là `Cast()` và `Convert`
+Đối với PostgreSQL thì chỉ có 1 lỗi ta có thể khai thác SQL injection - `đổi kiểu dữ liệu từ dạng chuỗi sang dạng số`- `INT`. Ta có 2 hàm sử dụng là `Cast()` và `Convert`
 đối với PostgreSQL thì ta sử dụng `Cast()`
 
 Một cách khác nữa là ta sử dụng SQL map
 
 # Solution:
 
-# 1ST
+# Cách 1:
 
 Sử dụng câu lệnh sau
 
@@ -63,4 +65,40 @@ Kết quả cho ra table là  `m3mbr35t4bl3`. Thực hiện lấy data trong tab
 ![image](https://user-images.githubusercontent.com/115911041/234263711-6ac5cf8d-5db7-4525-a3ed-1784cb72e91b.png)
 
 Kết quả cho ra 1 hàng dữ liệu của admin `Flag: 1a2BdKT5DIx3qxQN3UaC`
+
+# Cách 2:
+
+Ta nhớ lại là với mỗi câu truy vấn lỗi thì ta đều sẽ nhận được thông báo lỗi từ server. Và trong tài liệu mình đọc thì có một cách để khai thác lỗi này đó và dựa vào những câu lệnh ép kiểu.
+
+Ép kiểu trong sql thì cũng giống như ép kiểu trong lập trình vậy. Nó sẽ chuyển kiểu dữ liệu của một biến hay một giá trị từ kiểu này sang kiểu khác. Nhưng mà hai kiểu này phải tương đồng với nhau. Ví dụ như từ int sang float , float sang int, … chứ không thể chuyển từ string mà chuyển qua int hay float được.
+
+Những payload hay tên của table mình có tham khảo ở mục số (2) và (3) mà mình đã cung cấp ở `related resources`.
+
+Bây giờ ta sẽ chèn payload như sau
+
+`,cAsT(chr(126)||(sEleCt+table_name+fRoM+information_schema.tables+lImIt+1+offset+data_offset0)||chr(126)+as+nUmeRiC)--`
+
+Nó gợi ý mình sài LIMIT kèm với OFFSET mới được.Mình sẽ thử `limit 1 offset 0`
+
+`,cast(chr(126)||(select table_name from information_schema.tables limit 1 offset 0)||chr(126))+as+numeric)--`
+
+![image](https://user-images.githubusercontent.com/115911041/234286649-cc9bba23-05fa-4f0c-a07e-dbc78ecb4760.png)
+
+Mình để offset là 0 thì có result là `id`. Tiếp theo dùng Burp Intruder để cho off set chạy
+
+![image](https://user-images.githubusercontent.com/115911041/234287538-dceda6c1-2290-4657-a653-f00c8e725251.png)
+
+![image](https://user-images.githubusercontent.com/115911041/234288018-5cb4fd01-7a5e-4193-9bd6-8b915a791d4f.png)
+
+May là offset ở vị trí 1 và 2 `us3rn4m3_c0l` và `p455w0rd_c0l`.Bây giờ mình sẽ khai thác dữ liệu của 2 cột
+
+`,cast(chr(126)||(select us3rn4m3_c0l from m3mbr35t4bl3 limit 1 offset 0) as numeric)–-`
+
+`,cast(chr(126)||(select p455w0rd_c0l from m3mbr35t4bl3 limit 1 offset 0) as numeric)--`
+
+![image](https://user-images.githubusercontent.com/115911041/234288968-48b0f50d-5b60-43f4-a1cd-076c9315b625.png)
+
+
+
+
 
