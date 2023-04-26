@@ -11,6 +11,8 @@ To solve the lab, log in as the administrator user.
 
 # Overview
 
+`SQL injection with conditional errors` là kỹ thuật này khác với các cuộc tấn công SQL Injection thông thường ở chỗ nó không trực tiếp trả về kết quả của câu lệnh SQL độc hại, mà sử dụng các lỗi điều kiện để xác định kết quả của truy vấn SQL bằng cách đưa ra các câu hỏi `true` hay`false`.
+
 Ở lab này có lỗ hổng blind SQL. Ứng dụng này sử dụng tracking cookie để phân tích, và biểu diễn SQL query gồm các giá trị cookie được nhập vào.Kết quả của cuộc truy vấn không được trả lại, và không error messages được hiện lên. Nhưng ứng dụng thì bao gồm tin nhắn `Welcome back` ở trang web nếu query trả lại.
 
 Ta cần đăng nhập vào administrator user
@@ -31,7 +33,7 @@ Bước đầu tiên, ta cần xác định lỗ hổng bằng cách đưa reque
 
 Query được sử dụng trong lab này sẽ như thế này
 ```
-SELECT trackingId FROM someTable WHERE trackinID = '<COOKIE_VALUE>'
+SELECT trackingId FROM someTable WHERE trackingID = '<COOKIE_VALUE>'
 ```
 
 ![image](https://user-images.githubusercontent.com/115911041/232670060-97d3b04a-285a-4315-a488-aecb2cdd0a52.png)
@@ -57,7 +59,7 @@ Không thấy xuất hiện `Welcome back`
 
 **Confirm expected table**
 
-Đầu tiên, mình xác nhận table `users` có tồn tại hay không. Lần này, mình sử dụng string chữ từ table và so sánh nó.
+Đầu tiên, mình xác nhận table `users` có tồn tại hay không. Lần này, mình sử dụng string dạng chữ từ table và so sánh nó.
 
 ``` 
 SELECT trackingID FROM someTable WHERE trackingId = 'oLNIUOwSGHWlzJH1' and (select 'x' from users LIMIT 1)='x'--
@@ -91,7 +93,7 @@ Brute force độ dài với Burp Intruder (Sniper, Payload 1)
 
 ![image](https://user-images.githubusercontent.com/115911041/232675635-5a1aa5b2-e598-4425-8184-caa3d4635c58.png)
 
-Sau đó attack, kiểm tra payload nào xuất hiện `Welcome back` thì sẽ ra độ dài của password ở vị trí đó. Mình thì độ dài là 20.
+Sau đó attack, kiểm tra request nào xuất hiện `Welcome back` thì sẽ ra độ dài của password ở vị trí đó. Mình thì độ dài là 20.
 
 **Enumerate password of the administrator**
 
@@ -102,7 +104,7 @@ SELECT trackingId FROM someTable WHERE trackingId = 'oLNIUOwSGHWlzJH1' and (sele
 ```
 ![image](https://user-images.githubusercontent.com/115911041/232677055-c0e64e5e-498a-4551-80db-8c930243ed3e.png)
 
-Ta nhận ra rằng kí tự đầu tiên không phải là `a`, nhưng sử dụng Burp Intruder có thể tự động dễ dàng.
+Ta nhận ra rằng kí tự đầu tiên không phải là `a`, sử dụng Burp Intruder để Brute Force
 
 Attack type: ***Cluster bomb***
 
