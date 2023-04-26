@@ -11,7 +11,7 @@ To solve the lab, log in as the administrator user.
 
 # Overview
 
-Ở lab này có lỗ hổng blind SQL. Ứng dụng này sử dụng tracking cookie để phân tích, và biểu diễn SQL query gồm các giá trị cookie được nhập vào.Kết quả của cuộc truy vấn không được trả lại, và không error messages được hiện lên. Nhưng ứng dụng thì bao gồm tin nhắn `Welcome back` ở trang web nếu query trả lại.
+Ở lab này có lỗ hổng blind SQL. Application này sử dụng tracking cookie để phân tích, và biểu diễn SQL query gồm các giá trị cookie được nhập vào.Kết quả của cuộc truy vấn không được trả lại, và không error messages được hiện lên. Nhưng ứng dụng thì bao gồm tin nhắn `Welcome back` ở trang web nếu query trả lại.
 
 Ta cần đăng nhập vào administrator user
 
