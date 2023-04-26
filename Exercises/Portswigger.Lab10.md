@@ -11,8 +11,6 @@ To solve the lab, log in as the administrator user.
 
 # Overview
 
-`SQL injection with conditional errors` là kỹ thuật này khác với các cuộc tấn công SQL Injection thông thường ở chỗ nó không trực tiếp trả về kết quả của câu lệnh SQL độc hại, mà sử dụng các lỗi điều kiện để xác định kết quả của truy vấn SQL bằng cách đưa ra các câu hỏi `true` hay`false`.
-
 Ở lab này có lỗ hổng blind SQL. Ứng dụng này sử dụng tracking cookie để phân tích, và biểu diễn SQL query gồm các giá trị cookie được nhập vào.Kết quả của cuộc truy vấn không được trả lại, và không error messages được hiện lên. Nhưng ứng dụng thì bao gồm tin nhắn `Welcome back` ở trang web nếu query trả lại.
 
 Ta cần đăng nhập vào administrator user
