@@ -72,8 +72,21 @@ Nó cho thấy trang web, xác định đó là query hợp lệ và cũng như 
 
 ## Xác định user tồn tại trong database
 
+Để gây ra lỗi, chúng ta mở rộng ví dụ bằng cách thực hiện `division by zero` nếu tên người dùng không tồn tại. Câu lệnh này gây ra `internal server error`, chĩ ra rằng query này dẫn đến `division by zero`
 
+`'||(SELECT CASE WHEN (1=1) THEN to_char(1/0) ELSE NULL END FROM users WHERE username='administrator')||'`
 
+Thay đổi username thành một giá trị tùy ý, page được hiển thị. Điều này xác định rằng điều kiện `1=1` và `division by zero` phụ thuộc vào việc `FROM users WHERE...`  một phần trả về thứ gì đó.
+
+Điều này xác định `administrator` tồn tại trong database.
+
+## Xác định chiều dài của password
+
+Xác định chiều dài rất dễ dàng bằng cách sử dụng hàm `LENGTH` ở cuối câu điều kiện SQL.
+
+`'||(SELECT CASE WHEN (1=1) THEN to_char(1/0) ELSE NULL END FROM users WHERE username='administrator' and LENGTH(password)=1)||'`
+
+Sẽ hiển thị ra page, chỉ ra rằng kcheck `1=1`  chưa bào giờ được thực hiện. Sử dụng Burp Intruder, mình kiểm tra các số từ 1 đến 50 dưới dạng độ dài
 
 
 
