@@ -84,11 +84,30 @@ Thay đổi username thành một giá trị tùy ý, page được hiển thị
 
 Xác định chiều dài rất dễ dàng bằng cách sử dụng hàm `LENGTH` ở cuối câu điều kiện SQL.
 
-`'||(SELECT CASE WHEN (1=1) THEN to_char(1/0) ELSE NULL END FROM users WHERE username='administrator' and LENGTH(password)=1)||'`
+```
+'||(SELECT CASE WHEN (1=1) THEN to_char(1/0) ELSE NULL END FROM users WHERE username='administrator' and LENGTH(password)=1)||'
+```
 
-Sẽ hiển thị ra page, chỉ ra rằng kcheck `1=1`  chưa bào giờ được thực hiện. Sử dụng Burp Intruder, mình kiểm tra các số từ 1 đến 50 dưới dạng độ dài
+Sẽ hiển thị ra page, chỉ ra rằng kcheck `1=1`  chưa bào giờ được thực hiện. Sử dụng Burp Intruder, mình kiểm tra các số từ 1 đến 50. Và đây là kết quả:
 
+![image](https://user-images.githubusercontent.com/115911041/234764891-1bee6f68-254a-497e-8724-b0c7a15c0818.png)
 
+Password có độ dài là 20
 
+## Liệt kê password của administrator
+
+Bây giờ ta đã có độ dài của password, ta có thể brute force mỗi kí tự.
+
+```
+'||(SELECT CASE WHEN (1=1) THEN to_char(1/0) ELSE NULL END FROM users WHERE username='administrator' and SUBSTR(password,1,1)='a')||'
+```
+
+![image](https://user-images.githubusercontent.com/115911041/234771778-bf4cc7ce-115e-4f39-b730-430e28cd716a.png)
+
+Attack type : ***Cluster bomb***
+
+Payload 1: numeric (1..20)
+
+Payload 2: brute force
 
 
