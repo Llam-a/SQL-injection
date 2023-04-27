@@ -110,4 +110,7 @@ Payload 1: numeric (1..20)
 
 Payload 2: brute force
 
+![image](https://user-images.githubusercontent.com/115911041/234780110-868eeb9d-24a2-48b1-a425-675662867d78.png)
+
+`Password: cdqdx99j8s0srlhmnjq8`
 
