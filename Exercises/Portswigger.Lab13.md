@@ -25,3 +25,11 @@ MySQL: SELECT sleep(10)
 
 # Solution:
 
+```
+SELECT trackingId FROM someTable WHERE trackingId = 'vvv' || (<CODE HERE>) || ''
+```
+
+**vvv là giá trị của cookie**
+
+Kí tự đầu tiên được inject vào là `'` sau `vvv`, sau đó mình nối với output của code. Tiếp theo là nối với `'`. Đối với Oracle và PostgreSQL, `||` được sử dụng để ghép nối, với Microsoft `+` và  MySQL là `khoảng trắng`.
+
