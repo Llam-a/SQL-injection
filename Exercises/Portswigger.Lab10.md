@@ -120,12 +120,5 @@ Theo như số thứ tự của payload 1 sẽ cho ra password:
 
 ![image](https://user-images.githubusercontent.com/115911041/232678012-ab200efa-8465-4749-b2cf-f941c9ecf68b.png)
 
-# SQL map:
-
-Ta vẫn làm giống cách Burp Suite. Dựa vào lỗ hổng ở phần category. Truy cập vào mục bất kì, sau đó list toàn bộ database bằng sqlmap
-
-`python3 sqlmap.py -u "https://0a41004804f8311284e6eb0e00cd00b8.web-security-academy.net/filter?category=Corporate+gifts" --dbs`
-
-
-
+`
 
