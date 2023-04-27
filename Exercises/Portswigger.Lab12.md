@@ -35,3 +35,8 @@ Mình sử dụng Burp Repeater để thử các payload khác nhau. Đồi vớ
 
 ![image](https://user-images.githubusercontent.com/115911041/234788992-81be2926-549d-4b40-86a8-8605b42b80cb.png)
 
+Reload lại page thì ta đã complete được lab
+
+![image](https://user-images.githubusercontent.com/115911041/234790150-3b64c1df-ffb7-4610-9148-fe00e8159198.png)
+
+
