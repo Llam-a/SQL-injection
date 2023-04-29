@@ -96,13 +96,13 @@ Payload 1: numeric
 
 Payload 2: brute force
 
+![image](https://user-images.githubusercontent.com/115911041/235286093-e926ec6d-f5f6-4758-81e4-d26a879bcf4e.png)
 
+`password:ecei5oyr7agz3f1acqgc`
 
+Đăng nhập lại
 
-
-
-
-
+![image](https://user-images.githubusercontent.com/115911041/235286183-e45db7d8-eefd-43e5-8004-d4ecceb51c72.png)
 
 # Script python
 ```
