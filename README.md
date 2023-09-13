@@ -50,6 +50,23 @@
   - Nhập những payload để trigger time delays khi được thực thi trong SQL query và tìm kiếm sự khác biệt trong thời gian phản hồi.
 
   - Nhập [OAST payload](https://portswigger.net/blog/oast-out-of-band-application-security-testing#:~:text=OAST%20combines%20the%20delivery%20mechanism%20of%20conventional%20DAST,through%20the%20application%E2%80%99s%20processing%20in%20the%20normal%20way.) để trigger tương tác out-of-band network khi thực thi SQL query và giám sát mọi kết quả tương tác.
-  
+
+  # SQL injection in different parts of the query :
+
+  Các lỗ hổng SQL injection thường xảy ra trong mệnh đề WHERE của câu truy vấn SELECT và được nhiều người kiểm thử kinh nghiệm biết đến. Tuy nhiên, SQL injection có thể xảy ra ở bất kỳ vị trí nào trong câu truy vấn và trong các loại truy vấn khác nhau. Dưới đây là một số vị trí phổ biến khác mà SQL injection có thể xuất hiện:
+
+1. Trong câu truy vấn UPDATE, bên trong các giá trị được cập nhật hoặc trong mệnh đề WHERE:
+   - SQL injection có thể xảy ra khi kẻ tấn công chèn mã SQL độc hại vào các giá trị được cập nhật hoặc vào điều kiện WHERE. Điều này có thể dẫn đến việc thay đổi dữ liệu trong cơ sở dữ liệu hoặc truy vấn không mong muốn.
+
+2. Trong câu truy vấn INSERT, bên trong các giá trị được chèn:
+   - SQL injection có thể xảy ra khi dữ liệu đầu vào không được kiểm tra cẩn thận và kẻ tấn công có thể chèn mã SQL độc hại vào các giá trị được chèn vào cơ sở dữ liệu. Điều này có thể gây ra sự thay đổi không mong muốn trong cơ sở dữ liệu hoặc chèn dữ liệu độc hại.
+
+3. Trong câu truy vấn SELECT, bên trong tên bảng hoặc tên cột:
+   - SQL injection có thể xảy ra khi tên bảng hoặc tên cột không được xử lý đúng cách và kẻ tấn công có thể chèn các phần tử SQL độc hại vào tên bảng hoặc tên cột. Điều này có thể gây ra việc truy vấn hoặc trả về dữ liệu không mong muốn.
+
+4. Trong câu truy vấn SELECT, bên trong mệnh đề ORDER BY:
+   - SQL injection có thể xảy ra khi kẻ tấn công chèn mã SQL độc hại vào mệnh đề ORDER BY để thay đổi cách sắp xếp kết quả trả về. Điều này có thể gây ra sự rò rỉ thông tin hoặc thay đổi thứ tự của kết quả.
+
+Để bảo vệ ứng dụng khỏi SQL injection, người phát triển cần thực hiện kiểm tra và xử lý đúng cách dữ liệu đầu vào, sử dụng các thư viện thao tác với cơ sở dữ liệu an toàn, và tuân theo các nguyên tắc bảo mật phù hợp trong việc viết mã.
   
  
